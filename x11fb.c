@@ -42,6 +42,10 @@ void init_fb_window(int w, int h) {
 	}
 }
 
+void free_fb_window() {
+	// TODO
+}
+
 int main(int argc,char **argv)
 {
         init_fb_window(WIDTH, HEIGHT);
@@ -71,5 +75,6 @@ int main(int argc,char **argv)
 			old_time = new_time;
 		}
         }
+	free_fb_window();
         return 0;
 }
