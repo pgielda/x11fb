@@ -10,14 +10,15 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define WIDTH 640
 #define HEIGHT 480
 
-Display *display = NULL;
-Window window;
-int width = 0;
-int height = 0;
+static Display *display = NULL;
+static Window window;
+static int width = 0;
+static int height = 0;
 
 void fb_redraw(uint32_t *data) {
 	char *_data = (char*)malloc(width*height*4);
@@ -48,6 +49,8 @@ int main(int argc,char **argv)
         XEvent event;
 	uint32_t data[WIDTH * HEIGHT * 4];
 	printf("Press ESC or 'q' to exit.\n");
+	uint64_t fps = 0;
+	uint64_t old_time = time(NULL);
         while(1) {
 	        // generate some noise
 		for (int x = 0; x < WIDTH; x++) for (int y = 0; y < HEIGHT; y++) data[x+y*WIDTH] = rand() % 0xFFFFFF;
@@ -60,6 +63,13 @@ int main(int argc,char **argv)
 			printf("key / mouse event.\n");
                 }
 		usleep(8500); // TODO: should be clocked precisely
+		fps++;
+		uint64_t new_time = time(NULL);
+		if (new_time - old_time) { // TODO
+			printf("fps per %lus: %.2f\n", new_time-old_time, fps / (double)(new_time - old_time));
+			fps = 0;
+			old_time = new_time;
+		}
         }
         return 0;
 }
