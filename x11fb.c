@@ -32,7 +32,7 @@ void init_fb_window(int w, int h) {
 	if (init) {
 		display = XOpenDisplay(NULL);
 		Window root = RootWindow(display,DefaultScreen(display));
-        	window = XCreateSimpleWindow(display,root,50,50,WIDTH,HEIGHT,1,0,0);
+        	window = XCreateSimpleWindow(display,root,50,50,WIDTH,HEIGHT,1,0,0); // TODO: should be centered?
         	XSelectInput(display,window,/*ExposureMask |*/ ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask);
         	XMapWindow(display,window);
 		width = w;
@@ -52,7 +52,7 @@ int main(int argc,char **argv)
 	        // generate some noise
 		for (int x = 0; x < WIDTH; x++) for (int y = 0; y < HEIGHT; y++) data[x+y*WIDTH] = rand() % 0xFFFFFF;
 		fb_redraw(data);
-		if(XCheckWindowEvent(display, window, ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask, &event)) {
+		if(XCheckWindowEvent(display, window, ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask, &event)) {
                     if(event.type == KeyPress) {
 		    	if (event.xkey.keycode == 0x9 || event.xkey.keycode == 0x18) break;
 			printf("Key press, code 0x%x\n", event.xkey.keycode);
