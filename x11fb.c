@@ -112,18 +112,24 @@ int main(int argc,char **argv)
 		// generate some noise
 		uint32_t *data = fb_getdata(sid);
 		for (int x = 0; x < WIDTH; x++) for (int y = 0; y < HEIGHT; y++) data[x+y*WIDTH] = rand() % 0xFFFFFF;
-		if (posx != 0xFFFFFFFF) if ((posx > 1) && (posy > 1)) {
-                    data[posx - 1 + posy * WIDTH] = 0xFF0000;
+		if ((posx < WIDTH) && (posy < HEIGHT)) {
                     data[posx + posy * WIDTH] = 0xFF0000;
-                    data[posx + 1 + posy * WIDTH] = 0xFF0000;
-
-                    data[posx - 1 + (posy+1) * WIDTH] = 0xFF0000;
-                    data[posx + (posy+1) * WIDTH] = 0xFF0000;
-                    data[posx + 1 + (posy+1) * WIDTH] = 0xFF0000;
-
-                    data[posx - 1 + (posy-1) * WIDTH] = 0xFF0000;
-                    data[posx + (posy-1) * WIDTH] = 0xFF0000;
-                    data[posx + 1 + (posy-1) * WIDTH] = 0xFF0000;
+		    if (posx > 0)
+                        data[posx - 1 + posy * WIDTH] = 0xFF0000;
+		    if (posx < WIDTH)
+                        data[posx + 1 + posy * WIDTH] = 0xFF0000;
+		    if ((posx > 0) && (posy < HEIGHT))
+                        data[posx - 1 + (posy+1) * WIDTH] = 0xFF0000;
+		    if (posy < HEIGHT)
+                        data[posx + (posy+1) * WIDTH] = 0xFF0000;
+		    if ((posx < WIDTH) && (posy < HEIGHT))
+                        data[posx + 1 + (posy+1) * WIDTH] = 0xFF0000;
+		    if ((posx > 0) && (posy > 0))
+                        data[posx - 1 + (posy-1) * WIDTH] = 0xFF0000;
+                    if (posy > 0)
+                        data[posx + (posy-1) * WIDTH] = 0xFF0000;
+                    if ((posx < WIDTH) && (posy > 0))
+                        data[posx + 1 + (posy-1) * WIDTH] = 0xFF0000;
 		}
 		fb_redraw(sid);
 		while (XCheckWindowEvent(display, surfaces[sid].window, ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask, &event)) {
