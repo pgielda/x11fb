@@ -59,7 +59,7 @@ int create_fb_window(int w, int h) {
 	surfaces[surface_count].window = XCreateSimpleWindow(display, root, 50, 50, surfaces[surface_count].width, surfaces[surface_count].height, 1, 0, 0); // TODO: should be centered?
         XSelectInput(display,surfaces[surface_count].window, ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask);
         XMapWindow(display, surfaces[surface_count].window);
-	surfaces[surface_count].data = malloc(w * h * 4);
+	surfaces[surface_count].data = malloc(w * h * 4 + 256);
 	surfaces[surface_count].image = XCreateImage(display, DefaultVisual(display, DefaultScreen(display)), DefaultDepth(display, DefaultScreen(display)), ZPixmap, 0, surfaces[surface_count].data, w, h, 32, 0);
 	surface_count++;
 	return (surface_count - 1);
