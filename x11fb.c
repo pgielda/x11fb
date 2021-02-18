@@ -29,6 +29,10 @@ int frames = 0;
 uint32_t posx = 0xFFFFFFFF;
 uint32_t posy = 0xFFFFFFFF;
 
+// stub dlopen and dlsym
+void dlopen() {}
+void dlsym() {}
+
 // get framebuffer data
 uint32_t *fb_getdata(int surface_id) {
 	return (uint32_t*)surfaces[surface_id].image->data;
