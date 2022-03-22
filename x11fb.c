@@ -29,9 +29,11 @@ int frames = 0;
 uint32_t posx = 0xFFFFFFFF;
 uint32_t posy = 0xFFFFFFFF;
 
+#ifndef LIBRARY
 // stub dlopen and dlsym
 void dlopen() {}
 void dlsym() {}
+#endif
 
 // get framebuffer data
 uint32_t *fb_getdata(int surface_id) {
@@ -84,6 +86,19 @@ unsigned long long msepoch() {
     (unsigned long long)(tvl.tv_usec) / 1000;
 }
 
+uint64_t check_kbd_event(int sid) {
+   XEvent event;
+   if (XCheckWindowEvent(display, surfaces[sid].window, ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | PointerMotionMask, &event)) {
+      if (event.type == KeyPress) {
+          return 0x100000000 | event.xkey.keycode;
+      } else if (event.type == KeyRelease) {
+          return 0x200000000 | event.xkey.keycode;
+      }
+   }
+   return 0;
+}
+
+#ifndef LIBRARY
 int main(int argc,char **argv)
 {
 	int WIDTH = 640;
@@ -169,3 +184,4 @@ int main(int argc,char **argv)
 	free_fb_window(sid);
         return 0;
 }
+#endif
